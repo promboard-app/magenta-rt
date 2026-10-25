@@ -30,7 +30,8 @@ RTX 4070 SUPER 12GB · Windows 11, 판 small, 30초 곡:
 | 1.6GB | 31초 | 34.5초 | 71초 |
 
 - 30초 곡을 34.5초에 만들었습니다(실시간에 가까운 속도).
-- **미검증**: base 판(12GB 그래픽카드에서 돌려 보지 않았습니다), 30초가 아닌 길이.
+- **미검증**: base 판(12GB 그래픽카드에서 돌려 보지 않았습니다), 30초가 아닌 길이. 그래서 앱에는 '검증 안 됨'으로 보입니다(1.0.2 부터).
+- 지원 OS: 윈도우(위 실측) · 리눅스 · 맥(애플 칩, MPS). 리눅스 · 맥은 잠금 파일과 코드 경로만 있고 돌려 보지 않았습니다.
 
 ## 라이선스 · 표기
 
@@ -70,7 +71,7 @@ Spectrogram of a 30-second track made from `warm lo-fi hip hop with mellow piano
 - Settings: model (small, base), length in seconds (4–300), style strength (0–7, default 3), temperature (default 1.3), seed. No lyrics or vocals.
 - Magenta RT is a real-time streaming model; this node instead makes the whole track at once, two seconds at a time, reporting progress and accepting cancel between chunks.
 - Downloads: small (230M, default) 1.1 GB, base (2.4B) 9.8 GB, plus MusicCoCa (0.5 GB) for both. Only the chosen model is downloaded, pinned by sha256; nothing is in the plugin zip.
-- Measured (RTX 4070 SUPER 12 GB · Windows 11, small, 30-second track): 1.6 GB of extra GPU memory, load 31 s, generation 34.5 s (close to real time), 71 s in total. **Not verified**: the base model and lengths other than 30 seconds.
+- Measured (RTX 4070 SUPER 12 GB · Windows 11, small, 30-second track): 1.6 GB of extra GPU memory, load 31 s, generation 34.5 s (close to real time), 71 s in total. **Not verified**: the base model and lengths other than 30 seconds, so the app shows the plugin as unverified (from 1.0.2). Supported OS: Windows (measured above), Linux and macOS (Apple silicon, MPS); Linux and macOS have lock files and code paths but were not run.
 - **Install**: PromBoard → Plugin Manager → **Community plugins** → Browse → install, turn off **Restricted mode** and enable the plugin. The first prepare downloads the Python packages (including the app's pinned torch 2.8.0) and the chosen model (1.6 GB for small). Right-click an empty spot on the canvas: the node is in the plugin group at the bottom of the menu; connect a text node to its "style" input.
 
 The plugin texts in the app are Korean only for now — the plugin manifest takes a single language.
