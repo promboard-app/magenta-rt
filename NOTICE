@@ -1,0 +1,15 @@
+promboard.magenta-rt
+Copyright 2026 PromBoard
+
+This plugin is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+nodes/mrt2 contains the PyTorch port of Magenta RealTime 2 published at
+https://huggingface.co/magenta-community/magenta-realtime-2-small (revision 7037d99551c84ac5c6afb7f1a5e58c65e7233dbb),
+Copyright 2026 Google LLC, licensed under the Apache License, Version 2.0. Copied without changes
+(it is imported directly instead of through transformers trust_remote_code).
+
+Model weights are not included. Magenta RealTime 2 weights are Copyright 2026 Google LLC and licensed
+under Creative Commons Attribution 4.0 International (https://creativecommons.org/licenses/by/4.0/legalcode).
+The plugin downloads the torch-native copies from magenta-community/magenta-realtime-2(-small) and
+magenta-community/magenta-rt-musiccoca-torch on Hugging Face at prepare time.
+Attribution: "Magenta RealTime 2 (Google DeepMind), CC-BY-4.0".

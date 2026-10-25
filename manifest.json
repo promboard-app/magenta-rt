@@ -1,0 +1,189 @@
+{
+  "schema": 1,
+  "id": "promboard.magenta-rt",
+  "version": "1.0.0",
+  "name": "Magenta RT 2 — 연주곡 만들기",
+  "description": "Google DeepMind Magenta RealTime 2 로 스타일 글(영어)에서 가사 없는 연주곡을 정한 길이만큼 한 번에 만든다. 판은 small(230M, 기본) · base(2.4B, 더 좋은 소리). 원본 JAX 판과 토큰 단위로 같다고 검증된 PyTorch 판(magenta-community)을 쓴다. 결과는 48kHz 스테레오 WAV. 가중치는 CC-BY-4.0 이라 출처를 표기한다.",
+  "author": "PromBoard",
+  "license": "Apache-2.0",
+  "app": ">=1.0.1",
+  "repository": "https://github.com/promboard-app/magenta-rt",
+  "icon": "icon.png",
+  "contents": [
+    "nodes"
+  ],
+  "nodes": [
+    {
+      "id": "music",
+      "label": "Magenta RT 2 연주곡",
+      "description": "스타일 글(예: lo-fi hip hop, mellow piano)을 이으면 그 느낌의 연주곡을 정한 길이만큼 만든다. 가사 · 목소리는 없다. 결과는 48kHz 스테레오 WAV.",
+      "layout": "single",
+      "inputs": [
+        {
+          "id": "style",
+          "type": "text",
+          "label": "스타일 (영어)",
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "id": "audio",
+          "type": "audio",
+          "label": "연주곡"
+        }
+      ],
+      "settings": [
+        {
+          "id": "model",
+          "label": "판",
+          "help": "small 은 가볍고 빠르다(1.1GB). base 는 소리가 더 좋지만 무겁다(9.8GB). 고른 판만 받는다.",
+          "type": "select",
+          "options": [
+            {
+              "value": "small",
+              "label": "small (230M, 1.1GB)"
+            },
+            {
+              "value": "base",
+              "label": "base (2.4B, 9.8GB)"
+            }
+          ],
+          "default": "small"
+        },
+        {
+          "id": "duration",
+          "label": "길이(초)",
+          "type": "integer",
+          "default": 30,
+          "min": 4,
+          "max": 300
+        },
+        {
+          "id": "cfg",
+          "label": "스타일 따르기",
+          "help": "클수록 스타일 글을 더 따른다(기본 3).",
+          "type": "number",
+          "default": 3.0,
+          "min": 0.0,
+          "max": 7.0,
+          "step": 0.2
+        },
+        {
+          "id": "temperature",
+          "label": "다양성",
+          "help": "클수록 더 다양하고 작을수록 안정적이다(기본 1.3).",
+          "type": "number",
+          "default": 1.3,
+          "min": 0.5,
+          "max": 2.0,
+          "step": 0.05
+        },
+        {
+          "id": "seed",
+          "label": "시드",
+          "type": "integer",
+          "default": 0,
+          "min": 0,
+          "max": 2147483647
+        }
+      ]
+    }
+  ],
+  "python": {
+    "version": "3.12",
+    "torch": "host",
+    "lock": {
+      "win": "nodes/requirements-win.txt",
+      "linux": "nodes/requirements-linux.txt",
+      "mac": "nodes/requirements-mac.txt"
+    },
+    "entry": "nodes.main"
+  },
+  "gpu": {
+    "vramMinMb": 2048,
+    "cpuAllowed": false
+  },
+  "permissions": {},
+  "requires": {
+    "models": [
+      {
+        "source": "huggingface",
+        "repo": "magenta-community/magenta-rt-musiccoca-torch",
+        "revision": "236c488e38aa98643805514996934d705668298b",
+        "license": "CC-BY-4.0",
+        "files": [
+          {
+            "path": "text_encoder.pt",
+            "bytes": 419819353,
+            "sha256": "d23093557e151d9cf9bdea5320434b5d5f441386d870577fc741ec5609ba5618"
+          },
+          {
+            "path": "quantizer.pt",
+            "bytes": 72678385,
+            "sha256": "090e8ebab0a817d21833ca048a6ab9c3782c51890068d85d9fb14115aa1d79cf"
+          },
+          {
+            "path": "spm.model",
+            "bytes": 517448,
+            "sha256": "ff325a99b61ba5726cf6437cde6eefbb633dbaa363a684f7a97ed99b55202cca"
+          }
+        ]
+      },
+      {
+        "source": "huggingface",
+        "repo": "magenta-community/magenta-realtime-2-small",
+        "revision": "7037d99551c84ac5c6afb7f1a5e58c65e7233dbb",
+        "license": "CC-BY-4.0",
+        "files": [
+          {
+            "path": "config.json",
+            "bytes": 6151,
+            "sha256": "88100af0e4a9bcb8462ce1145d902983cbdcd5ac8b9ade496aca1ad6d42109c8"
+          },
+          {
+            "path": "model.safetensors",
+            "bytes": 1128837704,
+            "sha256": "da0146d5c442f16006fde3721f7ce6584e4c8f96024887a990f36bac46a625f5"
+          }
+        ],
+        "when": {
+          "node": "music",
+          "setting": "model",
+          "values": [
+            "small"
+          ]
+        }
+      },
+      {
+        "source": "huggingface",
+        "repo": "magenta-community/magenta-realtime-2",
+        "revision": "92087988d05d0fe38b11f021f0b0d00a75afb86b",
+        "license": "CC-BY-4.0",
+        "files": [
+          {
+            "path": "config.json",
+            "bytes": 6153,
+            "sha256": "8c89a1cfe10e9f4618aded3f29d64a49aefd51e0bafd9a1aac0b26a5628e7530"
+          },
+          {
+            "path": "model.safetensors",
+            "bytes": 9836752784,
+            "sha256": "045ac86f5be520d37020c94ef13cad3a84e336f18d82166748fd6b36a305540e"
+          }
+        ],
+        "when": {
+          "node": "music",
+          "setting": "model",
+          "values": [
+            "base"
+          ]
+        }
+      }
+    ]
+  },
+  "licenseNotice": {
+    "conditions": "가중치는 Google 의 CC-BY-4.0 이다 — 만든 곡이나 모델을 쓸 때 'Magenta RealTime 2 (Google DeepMind), CC-BY-4.0' 처럼 출처를 밝힌다. 남의 저작권 등 권리를 침해하는 결과물을 만들지 않는다(Google 이용 조건). 결과물에 대한 권리는 Google 이 주장하지 않는다.",
+    "url": "https://huggingface.co/google/magenta-realtime-2"
+  }
+}
